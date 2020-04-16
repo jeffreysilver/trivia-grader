@@ -85,7 +85,3 @@ if __name__ == "__main__":
     )
     args = parser.parse_args(sys.argv if len(sys.argv) == 1 else None)
     main(args)
-
-# input team answers
-
-# get score, and wrong answers
