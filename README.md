@@ -4,5 +4,6 @@ helper to grade quarantine trivia more accurately and efficiently. outputs each 
 
 ## Usage
 - Update the sample `answers.json` file with the correct answers to each round 
-- download trivia responses csv and save them as responses.csv
 - `python grader.py --round ROUND`
+- Copy and paste the responses from a round into responses.csv. Here's an example of the form that we use: [https://docs.google.com/forms/d/1WHiZ4Me8GSjVDjilt5EHQ7Lh8YitVVLYcsAGnuDfScI](https://docs.google.com/forms/d/1WHiZ4Me8GSjVDjilt5EHQ7Lh8YitVVLYcsAGnuDfScI/edit)
+- Follow the CLI prompts to grade a round
