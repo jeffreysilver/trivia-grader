@@ -1,20 +1,35 @@
 import argparse
 import sys
 import json
-from dataclasses import dataclass
-from typing import List
+from dataclasses import dataclass, asdict
+from typing import List, Optional
+import datetime
 import csv
 
 
-round_cache = {}
+funny_answers = [[] for i in range(10)]
 
 
 @dataclass
-class RoundResult:
+class FunnyAnswer:
+    team: str
+    response: str
+    answer: str
+
+
+@dataclass
+class WrongAnswer:
+    response: str
+    answer: str
+
+
+@dataclass
+class AnswerSheet:
     team: str
     round: int
-    score: int
-    wrong_answers: List
+    responses: List[str]
+    correct_answers: Optional[List[str]] = None
+    wrong_answers: Optional[List[WrongAnswer]] = None
 
 
 def _get_round_from_row(row):
@@ -22,60 +37,93 @@ def _get_round_from_row(row):
 
 
 def _get_answers_for_round(round):
-    if round in round_cache:
-        return round_cache[round]
-
     with open("answers.json") as f:
-        answers = json.load(f)[str(round)]
-        round_cache[round] = answers
-        return answers
+        return json.load(f)[str(round)]
 
 
-def grade_round(row) -> RoundResult:
-    team = row[1]
-    round = _get_round_from_row(row)
-    responses = row[3:]
-    correct_answers = _get_answers_for_round(round)
+def _naive_grade_answer(response, answer):
+    response = response.lower().strip()
+    answer = answer.lower().strip()
 
-    score = 0
+    if response == answer:
+        return True
+
+    if len(response) > 4 and (response in answer or answer in response):
+        return True
+
+    return False
+
+
+def grade_sheet(sheet: AnswerSheet, answers: List[str]):
+    correct_answers = []
     wrong_answers = []
-    for response, correct in zip(responses, correct_answers):
-        is_correct = response.lower() == correct.lower()
+    for index, (response, answer) in enumerate(zip(sheet.responses, answers)):
+        is_correct = _naive_grade_answer(response, answer)
+        if not is_correct:
+            grading_response = input(f"Answer: {answer}\nResponse: {response}\n> ")
+            if grading_response == "c":
+                print("logging correct answer...")
+                is_correct = True
+            if grading_response == "funny":
+                print("logging funnt answer....")
+                funny_answers[index].append(FunnyAnswer(sheet.team, response, answer))
+            print("")
 
         if is_correct:
-            score += 1
+            correct_answers.append(response)
         else:
-            wrong_answers.append((response, correct))
+            wrong_answers.append(WrongAnswer(response, answer))
 
-    return RoundResult(team, round, score, wrong_answers)
-
-
-def format_round(result: RoundResult):
-    print(f"Team: {result.team}")
-    print(f"Round: {result.round}")
-    print(f"Score: {result.score}")
-    print("Wrong answers:")
-    for res, expected in result.wrong_answers:
-        print(f"{res}\t{expected}")
-    print("")
+    sheet.correct_answers = correct_answers
+    sheet.wrong_answers = wrong_answers
+    return sheet
 
 
-def extract_responses():
+def extract_sheets(round):
     with open("responses.csv") as f:
-        reader = csv.reader(f)
-        next(reader)
+        reader = csv.reader(f, delimiter="\t")
         for row in reader:
-            yield row
+            form_round = _get_round_from_row(row)
+            if round != form_round:
+                continue
+
+            yield AnswerSheet(team=row[1], round=round, responses=row[3:])
 
 
-def main(args):
-    grading_round = args.round
-    for row in extract_responses():
-        round = _get_round_from_row(row)
-        if round != grading_round:
+def main(round):
+    print("-------------------------")
+    print("Press Enter if the answer is wrong.")
+    print("Type 'c' if the answer is correct")
+    print("Type 'funny' if the answer is wrong but funny.")
+    print("-------------------------")
+    answers = _get_answers_for_round(round)
+
+    sheets = [grade_sheet(sheet, answers) for sheet in extract_sheets(round)]
+    sheets.sort(key=lambda s: s.team)
+    print("")
+    print("")
+    print("RESULTS")
+    for sheet in sheets:
+        print(f"{sheet.team}: {len(sheet.correct_answers)}")
+
+    jsonified_round = [asdict(sheet) for sheet in sheets]
+    filename = f"{datetime.date.today()}-{round}.json"
+    with open(filename, "w") as f:
+        json.dump(jsonified_round, f)
+
+    print("\n\n")
+    input("Press enter when you are ready to see the funny answers:\n")
+
+    for i, round in enumerate(funny_answers):
+        if not round:
             continue
-        score = grade_round(row)
-        format_round(score)
+
+        print(f"Round: {i + 1}")
+        for answer in round:
+            print(f"Team: {answer.team}")
+            print(f"Expected: {answer.answer}")
+            print(f"Response: {answer.response}")
+            print("")
 
 
 if __name__ == "__main__":
@@ -84,4 +132,4 @@ if __name__ == "__main__":
         "--round", choices=[i for i in range(1, 6)], type=int, required=True
     )
     args = parser.parse_args(sys.argv if len(sys.argv) == 1 else None)
-    main(args)
+    main(args.round)
