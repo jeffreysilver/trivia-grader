@@ -2,7 +2,7 @@ import argparse
 import sys
 import json
 from dataclasses import dataclass, asdict
-from typing import List, Optional
+from typing import List, Optional, Union
 import datetime
 import csv
 
@@ -41,15 +41,19 @@ def _get_answers_for_round(round):
         return json.load(f)[str(round)]
 
 
-def _naive_grade_answer(response, answer):
-    response = response.lower().strip()
-    answer = answer.lower().strip()
+def _naive_grade_answer(response, answers: Union[str, List[str]]):
+    if isinstance(answers, str):
+        answers = [answers]
 
-    if response == answer:
-        return True
+    for answer in answers:
+        response = response.lower().strip()
+        answer = answer.lower().strip()
 
-    if len(response) > 4 and (response in answer or answer in response):
-        return True
+        if response == answer:
+            return True
+
+        if len(response) > 4 and (response in answer or answer in response):
+            return True
 
     return False
 
