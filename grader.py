@@ -87,6 +87,8 @@ def extract_sheets(round):
     with open("responses.csv") as f:
         reader = csv.reader(f, delimiter="\t")
         for row in reader:
+            if row[2].lower() == "bonus":
+                continue
             form_round = _get_round_from_row(row)
             if round != form_round:
                 continue
@@ -111,7 +113,7 @@ def main(round):
         print(f"{sheet.team}: {len(sheet.correct_answers)}")
 
     jsonified_round = [asdict(sheet) for sheet in sheets]
-    filename = f"{datetime.date.today()}-{round}.json"
+    filename = f"{round}-{datetime.datetime.now()}.json"
     with open(filename, "w") as f:
         json.dump(jsonified_round, f)
 

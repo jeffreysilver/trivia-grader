@@ -1,62 +1,62 @@
 {
-    "1": [
-        "The Big Lebowski",
-        "Almonds",
-        "Fava beans",
-        "French 75",
-        "Groundhog Day",
-        "Whiskey",
-        "Cosmopolitan",
-        "Mos Eisley",
-        "Vesper",
-        "Old Fashioned"
-    ],
-    "2": [
-        "rich uncle pennybags",
-        "Geoffrey the Giraffe",
-        "Chester the cheetah",
-        "Luxo Jr.",
-        "Julius Pringle",
-        "Gritty",
-        "Uga",
-        "Snap, Crackle, Pop",
-        "Benny the Bull",
-        "Leo the Lion"
-    ],
-    "3": [
-        "Wood",
-        "Beaufort",
-        "Spice",
-        "Richter",
-        "Diamond",
-        "Bristol Stool Scale",
-        "F5",
-        "273",
-        "Bortle Scale",
-        "Daniel Farady"
-    ],
-    "4": [
-        "Men at Work",
-        "Jimmy Cliff",
-        "Yoko Ono",
-        "Tito Puente",
-        "israel kamakawiwoole",
-        "The Cure",
-        "Cranberries",
-        "Luis Fonsi",
-        "Flight of the Conchords",
-        "Rihanna"
-    ],
-    "5": [
-        "DOOM",
-        "worcestershire",
-        "return",
-        "king lear",
-        "Dwarf planet",
-        "elf",
-        "Ring",
-        "Legoland",
-        "Tolkein",
-        "Lord of the rings"
-    ]
+  "1": [
+    ["dionysus", "dionysis"],
+    "omega",
+    "marathon",
+    "corinthian",
+    ["a", "nevada"],
+    ["thanasis", "kostas"],
+    "saganaki",
+    "santorini",
+    ["b", "1974"],
+    "the lobster"
+  ],
+  "2": [
+    "buckbeak",
+    "wilbur",
+    "gromit",
+    "santa's little helper",
+    "mr bigglesworth",
+    "salem",
+    "iago",
+    "mr peabody",
+    "sven",
+    "clifford"
+  ],
+  "3": [
+    ["fdr", "franklin roosevelt"],
+    ["a", "2004"],
+    "the lottery",
+    "matthew mcconaughey",
+    "igneous sedimentary metamorphic",
+    "like it love it gotta have it",
+    "charlie watts",
+    "roger stone",
+    "bedrock",
+    "south dakota"
+  ],
+  "4": [
+    "MIA",
+    "Grateful Dead",
+    "Gladys Knight",
+    "The Ojays",
+    "Little Eva",
+    "Far East Movement",
+    "Tracy chapman",
+    "bruce springsteen",
+    "tom cochrane",
+    "charli xcx"
+  ],
+  "5": [
+    "con air",
+    "national",
+    "treasure",
+    "arizona",
+    "face off",
+    "wicker",
+    "ghost ride",
+    "las vegas",
+    "the rock",
+    "nic cage movies"
+  ]
 }
