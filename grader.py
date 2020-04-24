@@ -69,7 +69,7 @@ def grade_sheet(sheet: AnswerSheet, answers: List[str]):
                 print("logging correct answer...")
                 is_correct = True
             if grading_response == "funny":
-                print("logging funnt answer....")
+                print("logging funny answer....")
                 funny_answers[index].append(FunnyAnswer(sheet.team, response, answer))
             print("")
 
